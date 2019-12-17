@@ -38,33 +38,10 @@ async function getSystemLoader() {
 	return `
 'use strict';
 (function () {
-  var doc = document;
-  var currentScript = doc.currentScript;
 
-  // Safari 10 support type="module" but still download and executes the nomodule script
-  if (!currentScript || !currentScript.hasAttribute('nomodule') || !('onbeforeload' in currentScript)) {
+  if (/Edge\\/\\d./i.test(navigator.userAgent)) {
 
     ${polyfills}
-
-    // Figure out currentScript (for IE11, since it does not support currentScript)
-    var regex = /\\/${'ionic'}(\\.esm)?\\.js($|\\?|#)/;
-    var scriptElm = currentScript || Array.from(doc.querySelectorAll('script')).find(function(s) {
-      return regex.test(s.src) || s.getAttribute('data-stencil-namespace') === "${'ionic'}";
-    });
-
-    var resourcesUrl = scriptElm ? scriptElm.getAttribute('data-resources-url') || scriptElm.src : '';
-    var start = function() {
-      var url = new URL('http://', resourcesUrl);
-      console.log(url)
-      System.import(url.href);
-    };
-
-    if (win.__stencil_cssshim) {
-      win.__stencil_cssshim.initShim().then(start);
-    } else {
-      start();
-    }
-
     // Note: using .call(window) here because the self-executing function needs
     // to be scoped to the window object for the ES6Promise polyfill to work
   }
@@ -75,6 +52,6 @@ async function getSystemLoader() {
 export async function writeSystemLoader() {
 
 	const loaderContent = await getSystemLoader();
-	return await fs.writeFileSync('./poly/ionic-config-polyfill.js', loaderContent)
+	return await fs.writeFileSync('./poly/ionic-polyfill.js', loaderContent)
 }
 writeSystemLoader()

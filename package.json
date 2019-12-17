@@ -6,7 +6,7 @@
   "scripts": {
     "pre-build": "tsc",
     "rollup": "npx rollup ./pre-build/css-shim/index.js --file ./prepped/css-shim.js -c",
-    "build": "node ./pre-build/src/index.js"
+    "build": "tsc && rollup && node ./pre-build/src/index.js"
   },
   "author": "",
   "license": "ISC",

@@ -91,7 +91,7 @@ function getSystemLoader() {
                 case 0: return [4 /*yield*/, getAppBrowserCorePolyfills()];
                 case 1:
                     polyfills = _a.sent();
-                    return [2 /*return*/, "\n'use strict';\n(function () {\n  var doc = document;\n  var currentScript = doc.currentScript;\n\n  // Safari 10 support type=\"module\" but still download and executes the nomodule script\n  if (!currentScript || !currentScript.hasAttribute('nomodule') || !('onbeforeload' in currentScript)) {\n\n    " + polyfills + "\n\n    // Figure out currentScript (for IE11, since it does not support currentScript)\n    var regex = /\\/" + 'ionic' + "(\\.esm)?\\.js($|\\?|#)/;\n    var scriptElm = currentScript || Array.from(doc.querySelectorAll('script')).find(function(s) {\n      return regex.test(s.src) || s.getAttribute('data-stencil-namespace') === \"" + 'ionic' + "\";\n    });\n\n    var resourcesUrl = scriptElm ? scriptElm.getAttribute('data-resources-url') || scriptElm.src : '';\n    var start = function() {\n      var url = new URL('http://', resourcesUrl);\n      console.log(url)\n      System.import(url.href);\n    };\n\n    if (win.__stencil_cssshim) {\n      win.__stencil_cssshim.initShim().then(start);\n    } else {\n      start();\n    }\n\n    // Note: using .call(window) here because the self-executing function needs\n    // to be scoped to the window object for the ES6Promise polyfill to work\n  }\n}).call(window);\n"];
+                    return [2 /*return*/, "\n'use strict';\n(function () {\n\n  if (/Edge\\/\\d./i.test(navigator.userAgent)) {\n\n    " + polyfills + "\n    // Note: using .call(window) here because the self-executing function needs\n    // to be scoped to the window object for the ES6Promise polyfill to work\n  }\n}).call(window);\n"];
             }
         });
     });
@@ -104,7 +104,7 @@ function writeSystemLoader() {
                 case 0: return [4 /*yield*/, getSystemLoader()];
                 case 1:
                     loaderContent = _a.sent();
-                    return [4 /*yield*/, fs.writeFileSync('./poly/ionic-config-polyfill.js', loaderContent)];
+                    return [4 /*yield*/, fs.writeFileSync('./poly/ionic-polyfill.js', loaderContent)];
                 case 2: return [2 /*return*/, _a.sent()];
             }
         });
